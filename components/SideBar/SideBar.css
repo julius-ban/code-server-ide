@@ -1,0 +1,16 @@
+.SideBar {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    color: black;
+    overflow: hidden;
+    
+}
+
+.SideBar h1 {
+    font-size: 3rem;
+}
+
+.SideBar p {
+    font-size: 2rem;
+}

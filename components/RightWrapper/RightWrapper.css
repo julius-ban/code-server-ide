@@ -1,0 +1,11 @@
+.RightWrapper {
+    width: 100%;
+    height: 95vh;
+    border: 1.5px solid #E0E0E0;
+}
+
+@media (max-width: 768px) {
+    .RightWrapper {
+        width: 45%;
+    }
+}
