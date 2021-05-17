@@ -1,27 +1,28 @@
 .DetailPanel {
-    width: 60%;
-    height: 100%;
-    padding: 1rem;
-    margin: 0 auto;
-    overflow: hidden;
+  width: 60%;
+  height: 100%;
+  padding: 1rem;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
-.DetailPanel h1 {
-    font-size: 3rem;
-}
-
-.DetailPanel p {
-    font-size: 2rem;
+.DetailPanel h2 {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .ui.button.Navigate-right-button {
-    float: right;
-    margin: 0px;
+  float: right;
+  margin: 0px;
 }
 
 .Navigate-page-num {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+img:hover {
+  transition : box-shadow .05s ease-in;
 }
