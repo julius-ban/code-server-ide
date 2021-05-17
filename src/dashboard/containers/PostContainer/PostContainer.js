@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { LeftWrapper, RightWrapper, SideBar, DetailPanel} from "../../components";
+import { Header, LeftWrapper, RightWrapper, SideBar, DetailPanel } from "../../components";
 
 class PostContainer extends Component {
   render() {
     return (
       <div>
+        <div>
+          <Header></Header>
+        </div>
         <div>
           <LeftWrapper>
             <SideBar></SideBar>

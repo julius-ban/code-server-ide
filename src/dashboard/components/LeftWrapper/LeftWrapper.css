@@ -1,9 +1,8 @@
 .LeftWrapper {
     height: 95vh;
     width: 20rem;
-    background-color: #DADADA;
+    background-color: #F2F2F2;
     text-align: left;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 @media (max-width: 768px) {

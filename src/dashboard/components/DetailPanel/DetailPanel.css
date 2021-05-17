@@ -24,6 +24,7 @@
   bottom: 25px;
   font-weight: bold;
   position: absolute;
+  color: black;
 }
 
 img:hover {
