@@ -4,7 +4,7 @@ import { Button } from "semantic-ui-react";
 import "./Header.css";
 
 const Header = () => (
-  <div className="Header">
+  <div className="N_Header">
     <Link to="/">
       <Button
         className="navigate-left-button"
