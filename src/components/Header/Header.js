@@ -3,7 +3,7 @@ import './Header.css';
 
 const Header = () => (
     <div className="Header">
-        OJT IDE
+        OJT_IDE.
     </div>
 )
 

@@ -4,9 +4,6 @@
   padding: 1rem;
   margin: 0 auto;
   overflow: hidden;
-}
-
-.DetailPanel h2 {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
@@ -16,13 +13,21 @@
   margin: 0px;
 }
 
-.Navigate-page-num {
+.content {
+  float: left;
+  position: relative;
+}
+
+.content-text {
+  left: 100px;
+  width: 450px;
+  bottom: 25px;
+  font-weight: bold;
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 img:hover {
-  transition : box-shadow .05s ease-in;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  transition: 0.2s;
+  background-color: whitesmoke;
 }

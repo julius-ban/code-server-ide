@@ -11,8 +11,8 @@ const DetailPanel = () => (
       color="grey"
       content="+ 새 컨테이너"
     />
-    <div>
-      <h3>새 컨테이너(0/5)</h3>
+    <div className="content">
+      <h4 className="content-text">새 컨테이너(0/5)</h4>
       <img src={img} width="300" height="300" alt="새 컨테이너"/>
     </div>
   </div>
