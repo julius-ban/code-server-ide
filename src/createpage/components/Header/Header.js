@@ -16,7 +16,7 @@ const Header = () => (
     <Button 
       className="navigate-right-button"
       color="blue"
-      content="생성"
+      content="컨테이너 생성"
       size="large"
     />
   </div>

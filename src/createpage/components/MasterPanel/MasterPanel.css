@@ -1,3 +1,41 @@
-.content {
-    background-color: gray;
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+#title-content {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.inner-content {
+    margin-top: 40px;
+    background-color: #F9F9F9;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+h4 {
+    width: 97%;
+}
+
+#name {
+    width: 50vh;
+}
+
+.icons {
+    background-color: #F2F3F7;
+    margin-left: 10px;
+}
+
+.icons:hover{
+    background-color: #DBFFD5;
+}
+
+.icon-item {
+    cursor: pointer;
+    text-align: center;
+}
+
+.right-button {
+    position: relative;
+    float: right;
+    top: 1vh;
+    right: 0%;
 }

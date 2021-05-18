@@ -1,5 +1,12 @@
 .navigate-right-button {
     position: relative;
     float: right;
-    top: -45%;
+    top: 1vh;
+    right: 1%;
+}
+
+.navigate-left-button {
+    position: relative;
+    top: 1vh;
+    right: -1%;
 }
