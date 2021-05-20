@@ -1,10 +1,11 @@
 const exprees = require('express');
 const app = exprees();
-const api = require('./routes/index');
-const cors = require('cors');
+const PORT = process.env.PORT || 4000;
 
-app.use(cors());
-app.use('/api', api);
+app.get('/', (req, res) => {
+    res.send('Server Response Success');
+})
 
-const port = 3002;
-app.listen(port, ()=>console.log( ` ${port} ` ));
+app.listen(PORT, () => {
+    console.log(`Server On : http://localhost:${PORT}/`);
+})
