@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import {Header, PostWrapper, MasterPanel} from "../../components"
+import {PostWrapper, MasterPanel} from "../../components"
 
 class nPostContainer extends Component {
     render() {
         return (
             <div>
-                <Header></Header>
-                <div>
-                    <PostWrapper>
-                        <MasterPanel></MasterPanel>
-                    </PostWrapper>
-                </div>
+                <PostWrapper>
+                    <MasterPanel></MasterPanel>
+                </PostWrapper>
             </div>
         );
     }

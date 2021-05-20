@@ -1,18 +1,99 @@
 import React, { Component } from "react";
 import "./MasterPanel.css";
 import DetailPanel from "../DetailPanel/DetailPanel.js";
-import { Form, Input, Segment, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Form, Input, Segment, Button, Confirm } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import java_icon from "./images/java_logo.svg";
 import node_icon from "./images/node_js_logo.svg";
 
 class MasterPanel extends Component {
-  state = { group1: null, group2: null, group3: null };
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  state = {
+    group1: "kor",
+    group2: "pub",
+    group3: "non",
+    group3_disable: true,
+    imageClicked: "java",
+    open: false,
+    result: "",
+    error_msg: {
+      name: "",
+      content: "",
+    },
+  };
+
+  // 라디오 그룹 제어함수
+  handleChange = (e, { name, value }) => {
+    this.setState({ [name]: value });
+    if (name === "group2") {
+      value === "pri"
+        ? this.setState({ group3_disable: false })
+        : this.setState({ group3_disable: true });
+    }
+  };
+
+  // 입력 폼 밸리데이션 체크
+  handleErrorMessage = (e) => {
+    let tg = e.target;
+    let formError = this.state.error_msg;
+
+    if (tg.name === "name" && tg.value.length > 20) {
+      formError.name = "컨테이너 이름은 20자로 제한됩니다.";
+    } else if (tg.name === "content" && tg.value.length > 100) {
+      formError.content = "컨테이너 설명은 100자로 제한됩니다.";
+    } else {
+      if (tg.name === "name") {
+        formError.name = "";
+      } else if (tg.name === "content") {
+        formError.content = "";
+      }
+    }
+    this.setState({ error_msg: formError });
+  };
+
+  // 생성 버튼 콜백함수
+  handleConfirm = () => this.setState({ result: "yes", open: false });
+  handleCancel = () => this.setState({ result: "no", open: false });
+  show = () => this.setState({ open: true });
+
+  // 이미지 클릭 이벤트
+  imageClick = (e) => {
+    let name = e.target.name;
+    this.setState({ imageClicked : name});
+  };
 
   render() {
+    const { open, result, imageClicked} = this.state;
+
     return (
       <div>
+        <Link to="/">
+          <Button
+            className="navigate-left-button"
+            color="grey"
+            content="대시보드로 돌아가기"
+            size="large"
+          />
+        </Link>
+        <div>
+          <Button
+            className="navigate-right-button"
+            color="blue"
+            content="컨테이너 생성"
+            size="large"
+            onClick={this.show}
+          />
+          <Confirm
+            open={open}
+            header="컨테이너 생성"
+            content="컨테이너를 생성하시겠습니까?"
+            cancelButton="취소"
+            confirmButton="생성"
+            onCancel={this.handleCancel}
+            onConfirm={this.handleConfirm}
+          />
+        </div>
+
         <h2 id="title-content">컨테이너 생성</h2>
         <div className="inner-content">
           <Segment>
@@ -21,8 +102,11 @@ class MasterPanel extends Component {
                 <label htmlFor="name">컨테이너 이름</label>
                 <Input
                   id="name"
-                  placeholder="알파벳, 숫자, _만 포함해야 합니다. 0/20"
+                  name="name"
+                  placeholder="영어 혹은 숫자만 허용됩니다. (0/20)"
+                  onChange={this.handleErrorMessage}
                 />
+                <div>{this.state.error_msg.name}</div>
               </Form.Field>
             </Form>
 
@@ -31,9 +115,12 @@ class MasterPanel extends Component {
             <Form size="large">
               <Form.TextArea
                 width={13}
+                name="content"
                 label="컨테이너 설명"
                 placeholder="컨테이너 설명을 입력해주세요. 0/100"
+                onChange={this.handleErrorMessage}
               />
+              <div>{this.state.error_msg.content}</div>
             </Form>
 
             <h4 className="ui dividing header"></h4>
@@ -119,6 +206,7 @@ class MasterPanel extends Component {
                   value="hub"
                   checked={this.state.group3 === "hub"}
                   onChange={this.handleChange}
+                  disabled={this.state.group3_disable}
                 />
                 <Form.Radio
                   label="Bitbucket"
@@ -126,6 +214,7 @@ class MasterPanel extends Component {
                   value="bit"
                   checked={this.state.group3 === "bit"}
                   onChange={this.handleChange}
+                  disabled={this.state.group3_disable}
                 />
                 <Form.Radio
                   label="Git"
@@ -133,6 +222,7 @@ class MasterPanel extends Component {
                   value="git"
                   checked={this.state.group3 === "git"}
                   onChange={this.handleChange}
+                  disabled={this.state.group3_disable}
                 />
               </Form.Group>
             </Form>
@@ -147,21 +237,27 @@ class MasterPanel extends Component {
                 <a className="icon-item">
                   <img
                     className="icons"
+                    name="java"
                     src={java_icon}
+                    style={this.state.imageClicked === "java" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
                     width="100"
                     height="100"
+                    onClick={this.imageClick}
                   />
                 </a>
                 <a className="icon-item">
                   <img
                     className="icons"
+                    name="node"
                     src={node_icon}
+                    style={this.state.imageClicked === "node" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
                     width="100"
                     height="100"
+                    onClick={this.imageClick}
                   />
                 </a>
               </div>
-              <DetailPanel />
+              <DetailPanel imageClicked={this.state.imageClicked}/>
             </Form>
 
             <h4 className="ui dividing header"></h4>
@@ -175,15 +271,6 @@ class MasterPanel extends Component {
               </Form.Group>
             </Form>
           </Segment>
-        </div>
-
-        <div>
-          <Button
-            className="right-button"
-            color="blue"
-            content="생성"
-            size="large"
-          />
         </div>
       </div>
     );

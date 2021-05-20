@@ -25,6 +25,8 @@ h4 {
 }
 
 .icons:hover{
+    cursor: pointer;
+    border: solid 0.3em;
     background-color: #DBFFD5;
 }
 
@@ -37,5 +39,23 @@ h4 {
     position: relative;
     float: right;
     top: 1vh;
+    right: 0%;
+}
+
+.top-right-button {
+    position: relative;
+    float: right;
+    top: -7.5vh;
+    right: -35%;
+}
+
+.navigate-right-button {
+    position: relative;
+    float: right;
+    top: -3.3vh;
+}
+
+.navigate-left-button {
+    position: relative;
     right: 0%;
 }
