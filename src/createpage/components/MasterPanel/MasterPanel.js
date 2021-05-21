@@ -51,19 +51,19 @@ class MasterPanel extends Component {
     this.setState({ error_msg: formError });
   };
 
-  // 생성 버튼 콜백함수
-  handleConfirm = () => this.setState({ result: "yes", open: false });
-  handleCancel = () => this.setState({ result: "no", open: false });
-  show = () => this.setState({ open: true });
-
   // 이미지 클릭 이벤트
   imageClick = (e) => {
     let name = e.target.name;
     this.setState({ imageClicked : name});
   };
 
+  // 생성 버튼 콜백함수
+  handleConfirm = () => this.setState({ result: "yes", open: false });
+  handleCancel = () => this.setState({ result: "no", open: false });
+  show = () => this.setState({ open: true });
+
   render() {
-    const { open, result, imageClicked} = this.state;
+    const { open } = this.state;
 
     return (
       <div>
@@ -110,7 +110,7 @@ class MasterPanel extends Component {
               </Form.Field>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form size="large">
               <Form.TextArea
@@ -123,7 +123,7 @@ class MasterPanel extends Component {
               <div>{this.state.error_msg.content}</div>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form className="region" size="large">
               <Form.Group inline className="region">
@@ -159,7 +159,7 @@ class MasterPanel extends Component {
               </Form.Group>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form size="large">
               <Form.Group inline>
@@ -181,7 +181,7 @@ class MasterPanel extends Component {
               </Form.Group>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form size="large">
               <Form.Group inline>
@@ -227,17 +227,18 @@ class MasterPanel extends Component {
               </Form.Group>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form size="large">
               <Form.Group inline>
                 <label>소프트웨어 스택</label>
               </Form.Group>
               <div className="icon-items">
-                <a className="icon-item">
+                <a href="#/" className="icon-item">
                   <img
                     className="icons"
                     name="java"
+                    alt="java_image"
                     src={java_icon}
                     style={this.state.imageClicked === "java" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
                     width="100"
@@ -245,10 +246,11 @@ class MasterPanel extends Component {
                     onClick={this.imageClick}
                   />
                 </a>
-                <a className="icon-item">
+                <a href="#/" className="icon-item">
                   <img
                     className="icons"
                     name="node"
+                    alt="node_img"
                     src={node_icon}
                     style={this.state.imageClicked === "node" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
                     width="100"
@@ -260,7 +262,7 @@ class MasterPanel extends Component {
               <DetailPanel imageClicked={this.state.imageClicked}/>
             </Form>
 
-            <h4 className="ui dividing header"></h4>
+            <h4 className="ui dividing header"> </h4>
 
             <Form size="large">
               <Form.Group inline>

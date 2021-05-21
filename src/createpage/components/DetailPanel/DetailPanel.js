@@ -41,28 +41,27 @@ class DetailPanel extends Component {
   render() {
     return (
       <div className="detail-body">
-        <Form className="detail-template-head">
-          <Form.Field id="detail-template-drop">
+          <Form.Field inline id="detail-template-drop">
             <label>Template</label>
             <Dropdown
               className="dropdown"
               clearable
               selection
               options={
-                temp_options.find((t) => t.name == this.props.imageClicked)
+                temp_options.find((t) => t.name === this.props.imageClicked)
                   .temp_content
               }
               placeholder='템플릿을 선택하세요'
             />
           </Form.Field>
-          <Form.Field id="detail-template-drop">
+          <Form.Field inline id="detail-template-drop">
             <label>OS</label>
             <Dropdown
               className="dropdown"
               clearable
               selection
               options={
-                temp_options.find((t) => t.name == this.props.imageClicked)
+                temp_options.find((t) => t.name === this.props.imageClicked)
                   .os_content
               }
               placeholder='OS를 선택하세요'
@@ -71,14 +70,14 @@ class DetailPanel extends Component {
           <Form.Field inline id="detail-template-content">
             <div
               style={
-                this.props.imageClicked == "java"
+                this.props.imageClicked === "java"
                   ? { display: "block" }
                   : { display: "none" }
               }
             >
               <Label size="large">
                 Java
-                <Label.Detail>2.4</Label.Detail>
+                <Label.Detail>9, 8, 7</Label.Detail>
               </Label>
               <Label size="large">
                 Maven
@@ -95,7 +94,7 @@ class DetailPanel extends Component {
             </div>
             <div
               style={
-                this.props.imageClicked == "node"
+                this.props.imageClicked === "node"
                   ? { display: "block" }
                   : { display: "none" }
               }
@@ -118,7 +117,6 @@ class DetailPanel extends Component {
               </Label>
             </div>
           </Form.Field>
-        </Form>
       </div>
     );
   }

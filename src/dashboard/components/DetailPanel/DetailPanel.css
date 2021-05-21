@@ -1,11 +1,13 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
 .DetailPanel {
   width: 60%;
   height: 100%;
   padding: 1rem;
   margin: 0 auto;
   overflow: hidden;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: 'Noto Sans KR', sans-serif;
+  flex-wrap: wrap;
 }
 
 .ui.button.Navigate-right-button {
@@ -14,6 +16,9 @@
 }
 
 .content {
+  margin-top: 10px;
+  margin-left:10px;
+  width: 291.5px;
   float: left;
   position: relative;
 }
@@ -27,11 +32,62 @@
   color: black;
 }
 
+.content-button {
+  left: 23px;
+  width: 250px;
+  bottom: 30px;
+  font-weight: bold;
+  position: absolute;
+  color: black;
+}
+
 img {
   background-color: #DADADA;
 }
 
-img:hover {
+img:hover, .container:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: 0.2s;
+}
+
+.container-1 {
+  margin-top: 10px;
+  margin-left:10px;
+  float: left;
+  position: relative;
+}
+
+.container {
+  height: 300px;
+  width: 300px;
+  float: left;
+  background-color: snow;
+}
+
+.container-text-name {
+  left: 30px;
+  width: 200px;
+  bottom: 200px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.container-text-lang {
+  left: 23px;
+  width: 120px;
+  bottom: 70px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.container-text-zone {
+  left: 150px;
+  width: 120px;
+  bottom: 70px;
+  font-weight: bold;
+  position: absolute;
+}
+
+#card {
+  height: 300px;
 }
