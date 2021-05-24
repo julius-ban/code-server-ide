@@ -2,10 +2,37 @@ import React, { Component } from "react";
 import "./MasterPanel.css";
 import DetailPanel from "../DetailPanel/DetailPanel.js";
 import { Link } from "react-router-dom";
-import { Form, Input, Segment, Button, Confirm } from "semantic-ui-react";
+import {
+  Form,
+  Input,
+  Segment,
+  Button,
+  Confirm,
+  Message,
+} from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import java_icon from "./images/java_logo.svg";
 import node_icon from "./images/node_js_logo.svg";
+import axios from "axios";
+
+function searchApi() {
+  let url = 'http://localhost:2375/containers/json';
+
+  axios.options(url, (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type');
+    res.header('Access-Control-Max-Age', 86400);
+    res.send();
+
+    axios.get(url).then(function () {
+      console.log("성공");
+    })
+    .catch(function (error) {
+      console.log("실패");
+    });
+  });  
+}
 
 class MasterPanel extends Component {
   state = {
@@ -17,8 +44,8 @@ class MasterPanel extends Component {
     open: false,
     result: "",
     error_msg: {
-      name: "",
-      content: "",
+      valid_name: "",
+      valid_content: "",
     },
   };
 
@@ -38,14 +65,16 @@ class MasterPanel extends Component {
     let formError = this.state.error_msg;
 
     if (tg.name === "name" && tg.value.length > 20) {
-      formError.name = "컨테이너 이름은 20자로 제한됩니다.";
+      formError.valid_name = "컨테이너 이름은 20자로 제한됩니다.";
+    } else if (tg.name === "name" && /[^a-z0-9]/.test(tg.value) === true) {
+      formError.valid_name = "컨테이너 이름은 영어 혹은 숫자만 허용됩니다.";
     } else if (tg.name === "content" && tg.value.length > 100) {
-      formError.content = "컨테이너 설명은 100자로 제한됩니다.";
+      formError.valid_content = "컨테이너 내용은 100자로 제한됩니다.";
     } else {
       if (tg.name === "name") {
-        formError.name = "";
+        formError.valid_name = "";
       } else if (tg.name === "content") {
-        formError.content = "";
+        formError.valid_content = "";
       }
     }
     this.setState({ error_msg: formError });
@@ -54,11 +83,16 @@ class MasterPanel extends Component {
   // 이미지 클릭 이벤트
   imageClick = (e) => {
     let name = e.target.name;
-    this.setState({ imageClicked : name});
+    this.setState({ imageClicked: name });
   };
 
   // 생성 버튼 콜백함수
-  handleConfirm = () => this.setState({ result: "yes", open: false });
+  handleConfirm = () => {
+    this.setState({ result: "yes", open: false });
+    var data = searchApi();
+    debugger;
+  };
+
   handleCancel = () => this.setState({ result: "no", open: false });
   show = () => this.setState({ open: true });
 
@@ -106,7 +140,17 @@ class MasterPanel extends Component {
                   placeholder="영어 혹은 숫자만 허용됩니다. (0/20)"
                   onChange={this.handleErrorMessage}
                 />
-                <div>{this.state.error_msg.name}</div>
+                <Message
+                  warning
+                  style={
+                    this.state.error_msg.valid_name !== ""
+                      ? { display: "block" }
+                      : { display: "none" }
+                  }
+                >
+                  <Message.Header>경고</Message.Header>
+                  <p>{this.state.error_msg.valid_name}</p>
+                </Message>
               </Form.Field>
             </Form>
 
@@ -120,7 +164,17 @@ class MasterPanel extends Component {
                 placeholder="컨테이너 설명을 입력해주세요. 0/100"
                 onChange={this.handleErrorMessage}
               />
-              <div>{this.state.error_msg.content}</div>
+              <Message
+                warning
+                style={
+                  this.state.error_msg.valid_content !== ""
+                    ? { display: "block" }
+                    : { display: "none" }
+                }
+              >
+                <Message.Header>경고</Message.Header>
+                <p>{this.state.error_msg.valid_content}</p>
+              </Message>
             </Form>
 
             <h4 className="ui dividing header"> </h4>
@@ -240,7 +294,11 @@ class MasterPanel extends Component {
                     name="java"
                     alt="java_image"
                     src={java_icon}
-                    style={this.state.imageClicked === "java" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
+                    style={
+                      this.state.imageClicked === "java"
+                        ? { background: "#DBFFD5", border: "solid 0.3em" }
+                        : { background: "#F2F3F7" }
+                    }
                     width="100"
                     height="100"
                     onClick={this.imageClick}
@@ -252,14 +310,18 @@ class MasterPanel extends Component {
                     name="node"
                     alt="node_img"
                     src={node_icon}
-                    style={this.state.imageClicked === "node" ? {background:"#DBFFD5", border: "solid 0.3em"} : {background:"#F2F3F7"}}
+                    style={
+                      this.state.imageClicked === "node"
+                        ? { background: "#DBFFD5", border: "solid 0.3em" }
+                        : { background: "#F2F3F7" }
+                    }
                     width="100"
                     height="100"
                     onClick={this.imageClick}
                   />
                 </a>
               </div>
-              <DetailPanel imageClicked={this.state.imageClicked}/>
+              <DetailPanel imageClicked={this.state.imageClicked} />
             </Form>
 
             <h4 className="ui dividing header"> </h4>
