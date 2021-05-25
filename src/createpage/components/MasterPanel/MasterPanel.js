@@ -15,24 +15,64 @@ import java_icon from "./images/java_logo.svg";
 import node_icon from "./images/node_js_logo.svg";
 import axios from "axios";
 
-function searchApi() {
-  let url = 'http://localhost:2375/containers/json';
-
-  axios.options(url, (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type');
-    res.header('Access-Control-Max-Age', 86400);
-    res.send();
-
-    axios.get(url).then(function () {
-      console.log("성공");
-    })
-    .catch(function (error) {
-      console.log("실패");
+// 도커를 통한 신규 컨테이너 생성 및 실행
+async function createContainer() {
+  let c_id;
+  try {
+    let newContainer = await axios({
+      method: "post",
+      url: "/containers/create",
+      data: {
+        Hostname: "test",
+        Image: "java_spring_vscode:latest",
+        ExposedPorts: {
+          "80/tcp": {},
+        },
+        HostConfig: {
+          Binds: [],
+          NetworkMode: "bridge",
+        }
+      }
     });
-  });  
+
+    c_id = newContainer.data.Id;
+
+    if (c_id !== null) {
+      await axios({
+        method: "post",
+        url: "/containers/"+ c_id + "/start",
+      });
+    } else {
+      console.log("컨테이너가 시작되지 않았습니다.");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  return c_id;
 }
+
+// 컨테이너 DB 인서트
+function insertTable(id, state){
+  // 생성용
+  axios({
+    method: "post",
+    url: "/api/insert",
+    data: {
+      user_id: "covj12",
+      container_id: id,
+      container_nm : state.input_data.name,
+      note_txt : state.input_data.content,
+      region_cd : state.group1,
+      tmpl_cd : state.group2,
+      tmpl_dtl : state.group3,
+      stack_cd : state.imageClicked,
+      pkg_1 : state.pkg_1,
+      pkg_2 : state.pkg_2,
+      pkg_3 : state.pkg_3
+    }
+  });
+};
+
 
 class MasterPanel extends Component {
   state = {
@@ -43,6 +83,13 @@ class MasterPanel extends Component {
     imageClicked: "java",
     open: false,
     result: "",
+    pkg_1 : "no",
+    pkg_2 : "no",
+    pkg_3 : "no",
+    input_data: {
+      name: "",
+      content: ""
+    },
     error_msg: {
       valid_name: "",
       valid_content: "",
@@ -59,10 +106,33 @@ class MasterPanel extends Component {
     }
   };
 
-  // 입력 폼 밸리데이션 체크
-  handleErrorMessage = (e) => {
+  // 추가 패키지 제어함수
+  handlePkgChange = (e, {value }) => {
+    if (value === "1" && this.state.pkg_1 === "no") {
+      this.setState({ pkg_1: "yes" });
+    } else {
+      this.setState({ pkg_1: "no" });
+    }
+
+    if (value === "2" && this.state.pkg_2 === "no") {
+      this.setState({ pkg_2: "yes" });
+    } else {
+      this.setState({ pkg_2: "no" });
+    }
+
+    if (value === "3" && this.state.pkg_3 === "no") {
+      this.setState({ pkg_3: "yes" });
+    } else {
+      this.setState({ pkg_3: "no" });
+    }
+    console.log(this.state);
+  };
+
+  // 밸리데이션 체크 & 입력
+  handleInputData = (e) => {
     let tg = e.target;
     let formError = this.state.error_msg;
+    let formInput = this.state.input_data;
 
     if (tg.name === "name" && tg.value.length > 20) {
       formError.valid_name = "컨테이너 이름은 20자로 제한됩니다.";
@@ -72,8 +142,10 @@ class MasterPanel extends Component {
       formError.valid_content = "컨테이너 내용은 100자로 제한됩니다.";
     } else {
       if (tg.name === "name") {
+        formInput.name = tg.value;
         formError.valid_name = "";
       } else if (tg.name === "content") {
+        formInput.content = tg.value;
         formError.valid_content = "";
       }
     }
@@ -86,11 +158,10 @@ class MasterPanel extends Component {
     this.setState({ imageClicked: name });
   };
 
-  // 생성 버튼 콜백함수
-  handleConfirm = () => {
+  // 생성 버튼 ok 콜백함수
+  handleConfirm = async () => {
     this.setState({ result: "yes", open: false });
-    var data = searchApi();
-    debugger;
+    insertTable(await createContainer(), this.state);    
   };
 
   handleCancel = () => this.setState({ result: "no", open: false });
@@ -98,7 +169,6 @@ class MasterPanel extends Component {
 
   render() {
     const { open } = this.state;
-
     return (
       <div>
         <Link to="/">
@@ -138,7 +208,7 @@ class MasterPanel extends Component {
                   id="name"
                   name="name"
                   placeholder="영어 혹은 숫자만 허용됩니다. (0/20)"
-                  onChange={this.handleErrorMessage}
+                  onChange={this.handleInputData}
                 />
                 <Message
                   warning
@@ -162,7 +232,7 @@ class MasterPanel extends Component {
                 name="content"
                 label="컨테이너 설명"
                 placeholder="컨테이너 설명을 입력해주세요. 0/100"
-                onChange={this.handleErrorMessage}
+                onChange={this.handleInputData}
               />
               <Message
                 warning
@@ -329,9 +399,9 @@ class MasterPanel extends Component {
             <Form size="large">
               <Form.Group inline>
                 <label>추가 모듈/패키지</label>
-                <Form.Checkbox label="Mysql 설치"></Form.Checkbox>
-                <Form.Checkbox label="mysql-ctl 명령 추가"></Form.Checkbox>
-                <Form.Checkbox label="MongoDb 설치"></Form.Checkbox>
+                <Form.Checkbox label="Mysql 설치" onClick={this.handlePkgChange} value = "1"></Form.Checkbox>
+                <Form.Checkbox label="mysql-ctl 명령 추가" onClick={this.handlePkgChange} value = "2"></Form.Checkbox>
+                <Form.Checkbox label="MongoDb 설치" onClick={this.handlePkgChange} value = "3"></Form.Checkbox>
               </Form.Group>
             </Form>
           </Segment>

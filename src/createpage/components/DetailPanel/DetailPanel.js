@@ -29,7 +29,7 @@ const temp_options = [
       { text: "Ubuntu 18.04 LTS", value: 1 },
       { text: "Ubuntu 16.04 LTS", value: 2 },
     ],
-  },
+  }
 ];
 
 class DetailPanel extends Component {

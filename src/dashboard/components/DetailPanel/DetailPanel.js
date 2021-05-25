@@ -10,27 +10,34 @@ class DetailPanel extends Component {
     container: null
   };
 
+  // DOM이 마운트 된 후
   componentDidMount() {
     this._getContainer();
   }
 
+  // 컨테이너 조회
   _getContainer = async () => {
     const res = await axios.get("/api/search");
     this.setState({ container: res.data.container });
   };
 
+  // state 변경사항 있을때 다시 그리기 여부
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.container !== this.state.container) return true;
   }
 
+  // 컨테이너 삭제
   handleDelete = async (e) => {
-    await axios.post("/api/delete", this.state.container[e.target.value]);
+    let data = this.state.container[e.target.value];
+    
+    // 컨테이너 정지 후 제거
+    await axios.post("/containers/"+ data.container_id + "/stop");
+    await axios.delete("/containers/"+ data.container_id);
+    await axios.post("/api/delete", data);
     this._getContainer();
   };
 
   render() {
-    debugger;
-
     let items = this.state.container;
     let items_1 = items != null && items.length > 0 ? true : false;
     let items_2 = items != null && items.length > 1 ? true : false;
