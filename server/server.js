@@ -12,9 +12,6 @@ app.use(bodyParser.json());
 
 // 컨테이너 조회
 app.get('/api/search', (req, res) => {
-    // debugger;
-    // const user_id = [req.body.inText];
-    // db.query("SELECT * FROM USER_INFO UI LEFT JOIN CONTAINER_INFO CI ON UI.USER_CD = CI.USER_CD WHERE USER_ID = (?)" + [user_id]
     db.query("SELECT * FROM USER_INFO UI INNER JOIN CONTAINER_INFO CI ON UI.USER_ID = CI.USER_ID WHERE UI.USER_ID = \"covj12\"" 
       ,(err, data) => {
         if(!err) res.send({ container : data });
@@ -32,12 +29,6 @@ app.post('/api/delete', (req, res) => {
         else res.send(err);
     });
 })
-
-//FOR EXAMPLE
-// connection.query('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?', ['a', 'b', 'c', userId], function (error, results, fields) {
-//  if (error) throw error;
-//   // ...
-//  });
 
 // 컨테이너 생성
 app.post('/api/insert', (req, res) => {

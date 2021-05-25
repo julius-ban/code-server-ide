@@ -14,6 +14,11 @@ RUN unzip gradle-5.4.1-bin.zip
 ENV PATH="/works/gradle-5.4.1/bin:${PATH}"
 
 # code-server
+WORKDIR /home/danawa/.code-server
 RUN wget https://github.com/cdr/code-server/releases/download/1.939-vsc1.33.1/code-server1.939-vsc1.33.1-linux-x64.tar.gz
 RUN tar xzf code-server1.939-vsc1.33.1-linux-x64.tar.gz -C ./ --strip-components 1
-CMD ./code-server --allow-http --no-auth
+
+WORKDIR /home/danawa
+
+# -p 10000 => 지정할 컨테이너 번호 
+CMD /home/danawa/.code-server/code-server --allow-http --no-auth -p 10000

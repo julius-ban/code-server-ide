@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./DetailPanel.css";
-import { Button, Label, Card } from "semantic-ui-react";
+import { Button, Label, Card, Dimmer, Loader} from "semantic-ui-react";
 import img from "./images/create_container.svg";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +10,7 @@ class DetailPanel extends Component {
     container: null
   };
 
-  // DOM이 마운트 된 후
+  // DOM 마운트 후
   componentDidMount() {
     this._getContainer();
   }
@@ -78,6 +78,7 @@ class DetailPanel extends Component {
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
+                onClick={() => window.open('http://localhost:10001/', '_blank')}
               ></Button>
             </Card.Content>
             <Button

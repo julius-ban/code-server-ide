@@ -8,7 +8,7 @@ import {
   Segment,
   Button,
   Confirm,
-  Message,
+  Message
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import java_icon from "./images/java_logo.svg";
@@ -26,13 +26,21 @@ async function createContainer() {
         Hostname: "test",
         Image: "java_spring_vscode:latest",
         ExposedPorts: {
-          "80/tcp": {},
+          "10000/tcp": {},
         },
         HostConfig: {
           Binds: [],
           NetworkMode: "bridge",
-        }
-      }
+          //Exposed된 컨테이너의 포트와 지정한 호스트 포트 번호를 바인딩한다.
+          PortBindings: {
+            "10000/tcp": [
+              {
+                HostPort: "10001"
+              }
+            ]
+          }
+        },
+      },
     });
 
     c_id = newContainer.data.Id;
@@ -40,7 +48,7 @@ async function createContainer() {
     if (c_id !== null) {
       await axios({
         method: "post",
-        url: "/containers/"+ c_id + "/start",
+        url: "/containers/" + c_id + "/start",
       });
     } else {
       console.log("컨테이너가 시작되지 않았습니다.");
@@ -52,27 +60,26 @@ async function createContainer() {
 }
 
 // 컨테이너 DB 인서트
-function insertTable(id, state){
-  // 생성용
+function insertTable(id, state) {
+  // 생성 API 호출
   axios({
     method: "post",
     url: "/api/insert",
     data: {
       user_id: "covj12",
       container_id: id,
-      container_nm : state.input_data.name,
-      note_txt : state.input_data.content,
-      region_cd : state.group1,
-      tmpl_cd : state.group2,
-      tmpl_dtl : state.group3,
-      stack_cd : state.imageClicked,
-      pkg_1 : state.pkg_1,
-      pkg_2 : state.pkg_2,
-      pkg_3 : state.pkg_3
-    }
+      container_nm: state.input_data.name,
+      note_txt: state.input_data.content,
+      region_cd: state.group1,
+      tmpl_cd: state.group2,
+      tmpl_dtl: state.group3,
+      stack_cd: state.imageClicked,
+      pkg_1: state.pkg_1,
+      pkg_2: state.pkg_2,
+      pkg_3: state.pkg_3,
+    },
   });
-};
-
+}
 
 class MasterPanel extends Component {
   state = {
@@ -83,17 +90,17 @@ class MasterPanel extends Component {
     imageClicked: "java",
     open: false,
     result: "",
-    pkg_1 : "no",
-    pkg_2 : "no",
-    pkg_3 : "no",
+    pkg_1: "no",
+    pkg_2: "no",
+    pkg_3: "no",
     input_data: {
       name: "",
-      content: ""
+      content: "",
     },
     error_msg: {
       valid_name: "",
       valid_content: "",
-    },
+    }
   };
 
   // 라디오 그룹 제어함수
@@ -107,7 +114,7 @@ class MasterPanel extends Component {
   };
 
   // 추가 패키지 제어함수
-  handlePkgChange = (e, {value }) => {
+  handlePkgChange = (e, { value }) => {
     if (value === "1" && this.state.pkg_1 === "no") {
       this.setState({ pkg_1: "yes" });
     } else {
@@ -125,7 +132,6 @@ class MasterPanel extends Component {
     } else {
       this.setState({ pkg_3: "no" });
     }
-    console.log(this.state);
   };
 
   // 밸리데이션 체크 & 입력
@@ -161,7 +167,7 @@ class MasterPanel extends Component {
   // 생성 버튼 ok 콜백함수
   handleConfirm = async () => {
     this.setState({ result: "yes", open: false });
-    insertTable(await createContainer(), this.state);    
+    insertTable(await createContainer(), this.state);
   };
 
   handleCancel = () => this.setState({ result: "no", open: false });
@@ -399,9 +405,21 @@ class MasterPanel extends Component {
             <Form size="large">
               <Form.Group inline>
                 <label>추가 모듈/패키지</label>
-                <Form.Checkbox label="Mysql 설치" onClick={this.handlePkgChange} value = "1"></Form.Checkbox>
-                <Form.Checkbox label="mysql-ctl 명령 추가" onClick={this.handlePkgChange} value = "2"></Form.Checkbox>
-                <Form.Checkbox label="MongoDb 설치" onClick={this.handlePkgChange} value = "3"></Form.Checkbox>
+                <Form.Checkbox
+                  label="Mysql 설치"
+                  onClick={this.handlePkgChange}
+                  value="1"
+                ></Form.Checkbox>
+                <Form.Checkbox
+                  label="mysql-ctl 명령 추가"
+                  onClick={this.handlePkgChange}
+                  value="2"
+                ></Form.Checkbox>
+                <Form.Checkbox
+                  label="MongoDb 설치"
+                  onClick={this.handlePkgChange}
+                  value="3"
+                ></Form.Checkbox>
               </Form.Group>
             </Form>
           </Segment>
