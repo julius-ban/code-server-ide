@@ -2,6 +2,15 @@ import React, { Component } from "react";
 import { Header, LeftWrapper, RightWrapper, SideBar, DetailPanel } from "../../components";
 
 class PostContainer extends Component {
+  constructor(props){
+    super(props);
+    this.state = {userId: "Danawa1"}
+  }
+
+  handleCreate = data => {
+    this.setState({userId : data.id});
+  }
+
   render() {
     return (
       <div>
@@ -10,12 +19,12 @@ class PostContainer extends Component {
         </div>
         <div>
           <LeftWrapper>
-            <SideBar></SideBar>
+            <SideBar onCreate={this.handleCreate}/>
           </LeftWrapper>
         </div>
         <div>
           <RightWrapper>
-            <DetailPanel></DetailPanel>
+            <DetailPanel userId={this.state}></DetailPanel>
           </RightWrapper>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./DetailPanel.css";
-import { Dropdown, Label, Form } from "semantic-ui-react";
+import { Dropdown, Label, Form, Button } from "semantic-ui-react";
 
 const temp_options = [
   {

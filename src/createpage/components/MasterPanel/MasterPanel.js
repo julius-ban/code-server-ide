@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./MasterPanel.css";
 import DetailPanel from "../DetailPanel/DetailPanel.js";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   Form,
   Input,
@@ -68,7 +68,7 @@ function insertTable(id, state) {
     method: "post",
     url: "/api/insert",
     data: {
-      user_id: "covj12",
+      user_id: state.user_id,
       container_id: id,
       container_nm: state.input_data.name,
       note_txt: state.input_data.content,
@@ -83,7 +83,8 @@ function insertTable(id, state) {
   });
 }
 
-class MasterPanel extends Component {
+
+class MasterPanel extends Component { 
   state = {
     group1: "kor",
     group2: "pub",
@@ -104,6 +105,7 @@ class MasterPanel extends Component {
       valid_name: "",
       valid_content: "",
     },
+    user_id: "Danawa1"
   };
 
   // 라디오 그룹 제어함수
@@ -181,6 +183,7 @@ class MasterPanel extends Component {
 
   render() {
     const { open } = this.state;
+
     return (
       <div>
         <Dimmer className="loadingBar" active={this.state.loadOfDatas}>

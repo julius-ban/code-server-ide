@@ -2,23 +2,24 @@ import React, { Component } from "react";
 import "./DetailPanel.css";
 import { Button, Label, Card, Dimmer, Loader } from "semantic-ui-react";
 import img from "./images/create_container.svg";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import axios from "axios";
 
 class DetailPanel extends Component {
   state = {
     container: null,
     loadOfDatas: false,
+    userId: this.props.userId
   };
-
+  
   // DOM 마운트 후
   componentDidMount() {
     this._getContainer();
   }
 
   // 컨테이너 조회
-  _getContainer = async () => {
-    const res = await axios.get("/api/search");
+  _getContainer = async (nextState) => {
+    const res = await axios.post("/api/search", {userId : nextState || this.state.userId});
     this.setState({ container: res.data.container, loadOfDatas: false });
   };
 
@@ -29,6 +30,10 @@ class DetailPanel extends Component {
       return true;
     } else if (nextState.loadOfDatas !== this.state.loadOfDatas) {
       // 로딩창 다시 그리기
+      return true;
+    } else if (nextProps.userId !== this.state.userId) {
+      // 유저 선택시 다시 그리기
+      this._getContainer(nextProps.userId);
       return true;
     } else {
       return false;
@@ -53,6 +58,10 @@ class DetailPanel extends Component {
     this._getContainer();
   };
 
+  // pushButtons = () => {
+  //   console.log(this.props.userId);
+  // }
+
   render() {
     let items = this.state.container;
     let items_1 = items != null && items.length > 0 ? true : false;
@@ -60,17 +69,19 @@ class DetailPanel extends Component {
     let items_3 = items != null && items.length > 2 ? true : false;
     let items_4 = items != null && items.length > 3 ? true : false;
     let items_5 = items != null && items.length > 4 ? true : false;
-
+    
     return (
       <div className="DetailPanel">
+        {/* <Button onClick={this.state.userId} onClick={this.pushButtons}>테스트버트</Button> */}
         <h3>컨테이너</h3>
-        <Link to="/newContainer">
+        <Link to={{pathname : '/newContainer', state:'aaaabbcccc'}}>
           <Button
             className="Navigate-right-button"
             color="grey"
             content="+ 새 컨테이너"
           />
         </Link>
+
         <Dimmer active={this.state.loadOfDatas}>
           <Loader>컨테이너 삭제중..</Loader>
         </Dimmer>

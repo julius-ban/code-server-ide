@@ -11,8 +11,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // 컨테이너 조회
-app.get('/api/search', (req, res) => {
-    db.query("SELECT * FROM USER_INFO UI INNER JOIN CONTAINER_INFO CI ON UI.USER_ID = CI.USER_ID WHERE UI.USER_ID = \"covj12\"" 
+app.post('/api/search', (req, res) => {
+    const user_id = req.body.userId.userId;
+    db.query("SELECT * FROM USER_INFO UI INNER JOIN CONTAINER_INFO CI ON UI.USER_ID = CI.USER_ID WHERE UI.USER_ID = (?)", [user_id] 
       ,(err, data) => {
         if(!err) res.send({ container : data });
         else res.send(err);
