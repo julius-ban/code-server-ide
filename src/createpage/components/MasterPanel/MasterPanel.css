@@ -59,3 +59,20 @@ h4 {
     position: relative;
     right: 0%;
 }
+
+.loadingBar {
+    z-index: 8;
+}
+
+#done-panel {
+    float: left;
+    left: 40%;
+    top: 40%;
+    border-radius: 11px;
+    text-align: center;
+}
+
+#done-panel-header, #done-panel-body {
+    margin-top: 10px;
+    text-align: center;
+}

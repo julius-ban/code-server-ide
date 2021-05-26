@@ -8,7 +8,9 @@ import {
   Segment,
   Button,
   Confirm,
-  Message
+  Message,
+  Dimmer,
+  Loader,
 } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import java_icon from "./images/java_logo.svg";
@@ -35,10 +37,10 @@ async function createContainer() {
           PortBindings: {
             "10000/tcp": [
               {
-                HostPort: "10001"
-              }
-            ]
-          }
+                HostPort: "10001",
+              },
+            ],
+          },
         },
       },
     });
@@ -89,6 +91,7 @@ class MasterPanel extends Component {
     group3_disable: true,
     imageClicked: "java",
     open: false,
+    loadOfDatas: false,
     result: "",
     pkg_1: "no",
     pkg_2: "no",
@@ -100,7 +103,7 @@ class MasterPanel extends Component {
     error_msg: {
       valid_name: "",
       valid_content: "",
-    }
+    },
   };
 
   // 라디오 그룹 제어함수
@@ -142,7 +145,7 @@ class MasterPanel extends Component {
 
     if (tg.name === "name" && tg.value.length > 20) {
       formError.valid_name = "컨테이너 이름은 20자로 제한됩니다.";
-    } else if (tg.name === "name" && /[^a-z0-9]/.test(tg.value) === true) {
+    } else if (tg.name === "name" && /[^a-zA-Z0-9]/.test(tg.value) === true) {
       formError.valid_name = "컨테이너 이름은 영어 혹은 숫자만 허용됩니다.";
     } else if (tg.name === "content" && tg.value.length > 100) {
       formError.valid_content = "컨테이너 내용은 100자로 제한됩니다.";
@@ -166,8 +169,11 @@ class MasterPanel extends Component {
 
   // 생성 버튼 ok 콜백함수
   handleConfirm = async () => {
-    this.setState({ result: "yes", open: false });
+    this.setState({ result: "yes", open: false, loadOfDatas: true });
     insertTable(await createContainer(), this.state);
+    // setTimeout(() => { // context에서 arrow 반드시 사용..?
+    //   this.setState({loadOfDatas : false});
+    // })
   };
 
   handleCancel = () => this.setState({ result: "no", open: false });
@@ -177,6 +183,35 @@ class MasterPanel extends Component {
     const { open } = this.state;
     return (
       <div>
+        <Dimmer className="loadingBar" active={this.state.loadOfDatas}>
+          <Loader
+            style={
+              this.state.loadOfDatas === true
+                ? { display: "none" }
+                : { display: "block" }
+            }
+          >
+            컨테이너 생성중..
+          </Loader>
+          <div
+            id="done-panel"
+            style={
+              this.state.loadOfDatas === true
+                ? { display: "block" }
+                : { display: "none" }
+            }
+          >
+            <h2 id="done-panel-header">컨테이너 생성 완료 !</h2>
+            <h3 id="done-panel-body">신규 컨테이너가 생성되었습니다.</h3>
+            <Link to="/">
+              <Button
+                content="대시보드로 이동"
+                color="olive"
+                onClick={this.handleClose}
+              />
+            </Link>
+          </div>
+        </Dimmer>
         <Link to="/">
           <Button
             className="navigate-left-button"
