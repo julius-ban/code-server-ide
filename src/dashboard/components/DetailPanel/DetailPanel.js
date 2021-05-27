@@ -57,7 +57,7 @@ class DetailPanel extends Component {
 
     this._getContainer();
   };
-
+  
   // pushButtons = () => {
   //   console.log(this.props.userId);
   // }
@@ -69,12 +69,13 @@ class DetailPanel extends Component {
     let items_3 = items != null && items.length > 2 ? true : false;
     let items_4 = items != null && items.length > 3 ? true : false;
     let items_5 = items != null && items.length > 4 ? true : false;
-    
+
     return (
       <div className="DetailPanel">
         {/* <Button onClick={this.state.userId} onClick={this.pushButtons}>테스트버트</Button> */}
         <h3>컨테이너</h3>
-        <Link to={{pathname : '/newContainer', state:'aaaabbcccc'}}>
+        
+        <Link to={{pathname : '/newContainer', state : this.props.userId}}>
           <Button
             className="Navigate-right-button"
             color="grey"

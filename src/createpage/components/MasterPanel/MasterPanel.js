@@ -171,7 +171,7 @@ class MasterPanel extends Component {
 
   // 생성 버튼 ok 콜백함수
   handleConfirm = async () => {
-    this.setState({ result: "yes", open: false, loadOfDatas: true });
+    this.setState({ result: "yes", open: false, loadOfDatas: true, user_id: this.props.userId});
     insertTable(await createContainer(), this.state);
     // setTimeout(() => { // context에서 arrow 반드시 사용..?
     //   this.setState({loadOfDatas : false});
@@ -183,7 +183,6 @@ class MasterPanel extends Component {
 
   render() {
     const { open } = this.state;
-
     return (
       <div>
         <Dimmer className="loadingBar" active={this.state.loadOfDatas}>

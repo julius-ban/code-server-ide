@@ -6,7 +6,7 @@ class nPostContainer extends Component {
         return (
             <div>
                 <PostWrapper>
-                    <MasterPanel></MasterPanel>
+                    <MasterPanel userId={this.props.location.state.userId}></MasterPanel>
                 </PostWrapper>
             </div>
         );
