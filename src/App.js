@@ -8,8 +8,10 @@ class App extends Component {
     return (
       <div>
         <BrowserRouter>
+          <div>
           <Route path="/" component={PostContainer} exact></Route>
           <Route path="/newContainer" component={nPostContainer}></Route>
+          </div>
         </BrowserRouter>
       </div>
     );

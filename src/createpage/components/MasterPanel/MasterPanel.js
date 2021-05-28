@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./MasterPanel.css";
 import DetailPanel from "../DetailPanel/DetailPanel.js";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Form,
   Input,
@@ -18,7 +18,7 @@ import node_icon from "./images/node_js_logo.svg";
 import axios from "axios";
 
 // 도커를 통한 신규 컨테이너 생성 및 실행
-async function createContainer() {
+async function createContainer(port) {
   let c_id;
   try {
     let newContainer = await axios({
@@ -37,7 +37,7 @@ async function createContainer() {
           PortBindings: {
             "10000/tcp": [
               {
-                HostPort: "10001",
+                HostPort: String(port),
               },
             ],
           },
@@ -61,8 +61,19 @@ async function createContainer() {
   return c_id;
 }
 
+// 컨테이너 조회
+async function getAlivePort () {
+  const res = axios({
+    method: "post",
+    url: "/api/portscan"
+  });
+  
+  return res;
+};
+
 // 컨테이너 DB 인서트
 function insertTable(id, state) {
+  console.log(state);
   // 생성 API 호출
   axios({
     method: "post",
@@ -79,6 +90,7 @@ function insertTable(id, state) {
       pkg_1: state.pkg_1,
       pkg_2: state.pkg_2,
       pkg_3: state.pkg_3,
+      port: state.port
     },
   });
 }
@@ -97,6 +109,7 @@ class MasterPanel extends Component {
     pkg_1: "no",
     pkg_2: "no",
     pkg_3: "no",
+    port: null,
     input_data: {
       name: "",
       content: "",
@@ -171,11 +184,9 @@ class MasterPanel extends Component {
 
   // 생성 버튼 ok 콜백함수
   handleConfirm = async () => {
-    this.setState({ result: "yes", open: false, loadOfDatas: true, user_id: this.props.userId});
-    insertTable(await createContainer(), this.state);
-    // setTimeout(() => { // context에서 arrow 반드시 사용..?
-    //   this.setState({loadOfDatas : false});
-    // })
+    let res = await getAlivePort();
+    this.setState({ result: "yes", open: false, loadOfDatas: true, user_id: this.props.userId.userId, port : res.data.port});
+    insertTable(await createContainer(res.data.port), this.state);
   };
 
   handleCancel = () => this.setState({ result: "no", open: false });

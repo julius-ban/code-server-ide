@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import "./DetailPanel.css";
 import { Button, Label, Card, Dimmer, Loader } from "semantic-ui-react";
 import img from "./images/create_container.svg";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 class DetailPanel extends Component {
   state = {
     container: null,
     loadOfDatas: false,
-    userId: this.props.userId
+    userId: this.props.userId,
+    port: null
   };
   
   // DOM 마운트 후
@@ -20,7 +21,7 @@ class DetailPanel extends Component {
   // 컨테이너 조회
   _getContainer = async (nextState) => {
     const res = await axios.post("/api/search", {userId : nextState || this.state.userId});
-    this.setState({ container: res.data.container, loadOfDatas: false });
+    this.setState({ container: res.data.container, loadOfDatas: false, userId : this.props.userId });
   };
 
   // state 변경사항 있을때 다시 그리기 여부
@@ -59,23 +60,26 @@ class DetailPanel extends Component {
   };
   
   // pushButtons = () => {
-  //   console.log(this.props.userId);
+  //   console.log(this.state);
   // }
 
   render() {
     let items = this.state.container;
-    let items_1 = items != null && items.length > 0 ? true : false;
-    let items_2 = items != null && items.length > 1 ? true : false;
-    let items_3 = items != null && items.length > 2 ? true : false;
-    let items_4 = items != null && items.length > 3 ? true : false;
-    let items_5 = items != null && items.length > 4 ? true : false;
+    let itemsBool = [false, false, false, false, false];
+
+    for(var i=0; i<5; i++){
+      if(items != null && items.length > i){
+        itemsBool[i] = true;
+        // this.setState({port : items[i].port});
+      }
+    } 
 
     return (
       <div className="DetailPanel">
-        {/* <Button onClick={this.state.userId} onClick={this.pushButtons}>테스트버트</Button> */}
+        {/* <Button onClick={this.pushButtons}>테스트버튼</Button> */}
         <h3>컨테이너</h3>
         
-        <Link to={{pathname : '/newContainer', state : this.props.userId}}>
+        <Link to={{pathname : '/newContainer', state : this.state}}>
           <Button
             className="Navigate-right-button"
             color="grey"
@@ -88,28 +92,28 @@ class DetailPanel extends Component {
         </Dimmer>
         <div
           className="content"
-          style={items_1 ? { display: "block" } : { display: "none" }}
+          style={itemsBool[0] ? { display: "block" } : { display: "none" }}
         >
           <Card className="container">
-            <Card.Content header={items_1 ? items[0].container_nm : ""} />
+            <Card.Content header={itemsBool[0] ? items[0].container_nm : ""} />
             <Card.Content
               id="card"
-              description={items_1 ? items[0].note_txt : ""}
+              description={itemsBool[0] ? items[0].note_txt : ""}
             />
             <Card.Content extra>
               <Label className="container-text-lang" color="teal">
                 Language
-                <Label.Detail>{items_1 ? items[0].stack_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[0] ? items[0].stack_cd : ""}</Label.Detail>
               </Label>
               <Label className="container-text-zone" color="yellow">
                 Region
-                <Label.Detail>{items_1 ? items[0].region_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[0] ? items[0].region_cd : ""}</Label.Detail>
               </Label>
               <Button
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
-                onClick={() => window.open("http://localhost:10001/", "_blank")}
+                onClick={() => window.open("http://localhost:"+ items[0].port +"/", "_blank")}
               ></Button>
             </Card.Content>
             <Button
@@ -124,28 +128,28 @@ class DetailPanel extends Component {
         </div>
         <div
           className="content"
-          style={items_2 ? { display: "block" } : { display: "none" }}
+          style={itemsBool[1] ? { display: "block" } : { display: "none" }}
         >
           <Card className="container">
-            <Card.Content header={items_2 ? items[1].container_nm : ""} />
+            <Card.Content header={itemsBool[1] ? items[1].container_nm : ""} />
             <Card.Content
               id="card"
-              description={items_2 ? items[1].note_txt : ""}
+              description={itemsBool[1] ? items[1].note_txt : ""}
             />
             <Card.Content extra>
               <Label className="container-text-lang" color="teal">
                 Language
-                <Label.Detail>{items_2 ? items[1].stack_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[1] ? items[1].stack_cd : ""}</Label.Detail>
               </Label>
               <Label className="container-text-zone" color="yellow">
                 Region
-                <Label.Detail>{items_2 ? items[1].region_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[1] ? items[1].region_cd : ""}</Label.Detail>
               </Label>
               <Button
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
-                onClick={() => window.open("http://localhost:10001/", "_blank")}
+                onClick={() => window.open("http://localhost:"+ items[1].port +"/", "_blank")}
               ></Button>
             </Card.Content>
             <Button
@@ -160,28 +164,28 @@ class DetailPanel extends Component {
         </div>
         <div
           className="content"
-          style={items_3 ? { display: "block" } : { display: "none" }}
+          style={itemsBool[2] ? { display: "block" } : { display: "none" }}
         >
           <Card className="container">
-            <Card.Content header={items_3 ? items[2].container_nm : ""} />
+            <Card.Content header={itemsBool[2] ? items[2].container_nm : ""} />
             <Card.Content
               id="card"
-              description={items_3 ? items[2].note_txt : ""}
+              description={itemsBool[2] ? items[2].note_txt : ""}
             />
             <Card.Content extra>
               <Label className="container-text-lang" color="teal">
                 Language
-                <Label.Detail>{items_3 ? items[2].stack_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[2] ? items[2].stack_cd : ""}</Label.Detail>
               </Label>
               <Label className="container-text-zone" color="yellow">
                 Region
-                <Label.Detail>{items_3 ? items[2].region_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[2] ? items[2].region_cd : ""}</Label.Detail>
               </Label>
               <Button
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
-                onClick={() => window.open("http://localhost:10001/", "_blank")}
+                onClick={() => window.open("http://localhost:"+ items[2].port +"/", "_blank")}
               ></Button>
             </Card.Content>
             <Button
@@ -196,28 +200,28 @@ class DetailPanel extends Component {
         </div>
         <div
           className="content"
-          style={items_4 ? { display: "block" } : { display: "none" }}
+          style={itemsBool[3] ? { display: "block" } : { display: "none" }}
         >
           <Card className="container">
-            <Card.Content header={items_4 ? items[3].container_nm : ""} />
+            <Card.Content header={itemsBool[3] ? items[3].container_nm : ""} />
             <Card.Content
               id="card"
-              description={items_4 ? items[3].note_txt : ""}
+              description={itemsBool[3] ? items[3].note_txt : ""}
             />
             <Card.Content extra>
               <Label className="container-text-lang" color="teal">
                 Language
-                <Label.Detail>{items_4 ? items[3].stack_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[3] ? items[3].stack_cd : ""}</Label.Detail>
               </Label>
               <Label className="container-text-zone" color="yellow">
                 Region
-                <Label.Detail>{items_4 ? items[3].region_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[3] ? items[3].region_cd : ""}</Label.Detail>
               </Label>
               <Button
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
-                onClick={() => window.open("http://localhost:10001/", "_blank")}
+                onClick={() => window.open("http://localhost:"+ items[3].port +"/", "_blank")}
               ></Button>
             </Card.Content>
             <Button
@@ -232,28 +236,28 @@ class DetailPanel extends Component {
         </div>
         <div
           className="content"
-          style={items_5 ? { display: "block" } : { display: "none" }}
+          style={itemsBool[4] ? { display: "block" } : { display: "none" }}
         >
           <Card className="container">
-            <Card.Content header={items_5 ? items[4].container_nm : ""} />
+            <Card.Content header={itemsBool[4] ? items[4].container_nm : ""} />
             <Card.Content
               id="card"
-              description={items_5 ? items[4].note_txt : ""}
+              description={itemsBool[4] ? items[4].note_txt : ""}
             />
             <Card.Content extra>
               <Label className="container-text-lang" color="teal">
                 Language
-                <Label.Detail>{items_5 ? items[4].stack_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[4] ? items[4].stack_cd : ""}</Label.Detail>
               </Label>
               <Label className="container-text-zone" color="yellow">
                 Region
-                <Label.Detail>{items_5 ? items[4].region_cd : ""}</Label.Detail>
+                <Label.Detail>{itemsBool[4] ? items[4].region_cd : ""}</Label.Detail>
               </Label>
               <Button
                 className="content-button"
                 content="▶ 터미널 실행"
                 color="black"
-                onClick={() => window.open("http://localhost:10001/", "_blank")}
+                onClick={() => window.open("http://localhost:"+ items[4].port +"/", "_blank")}
               ></Button>
             </Card.Content>
             <Button
@@ -266,7 +270,7 @@ class DetailPanel extends Component {
             />
           </Card>
         </div>
-        <Link to="/newContainer">
+        <Link to={{pathname : '/newContainer', state : this.state}}>          
           <div className="content">
             <h4 className="content-text">
               {items != null && items.length > 0
