@@ -18,15 +18,16 @@ import node_icon from "./images/node_js_logo.svg";
 import axios from "axios";
 
 // 도커를 통한 신규 컨테이너 생성 및 실행
-async function createContainer(port) {
+async function createContainer(port, pickImage) {
   let c_id;
+  console.log(pickImage);
   try {
     let newContainer = await axios({
       method: "post",
       url: "/containers/create",
       data: {
         Hostname: "test",
-        Image: "java_spring_vscode:latest",
+        Image: pickImage === "java" ? "java_spring_vscode:latest" : "nodejs_vscode:latest",
         ExposedPorts: {
           "10000/tcp": {},
         },
@@ -46,6 +47,7 @@ async function createContainer(port) {
     });
 
     c_id = newContainer.data.Id;
+    console.log(newContainer.data.Id);
 
     if (c_id !== null) {
       await axios({
@@ -184,9 +186,10 @@ class MasterPanel extends Component {
 
   // 생성 버튼 ok 콜백함수
   handleConfirm = async () => {
+    this.setState({ result: "yes", open: false, loadOfDatas: true, user_id: this.props.userId.userId});
     let res = await getAlivePort();
-    this.setState({ result: "yes", open: false, loadOfDatas: true, user_id: this.props.userId.userId, port : res.data.port});
-    insertTable(await createContainer(res.data.port), this.state);
+    this.setState({ port : res.data.port});
+    insertTable(await createContainer(res.data.port, this.state.imageClicked), this.state);
   };
 
   handleCancel = () => this.setState({ result: "no", open: false });
@@ -199,7 +202,7 @@ class MasterPanel extends Component {
         <Dimmer className="loadingBar" active={this.state.loadOfDatas}>
           <Loader
             style={
-              this.state.loadOfDatas === true
+              this.state.port !== null
                 ? { display: "none" }
                 : { display: "block" }
             }
@@ -209,7 +212,7 @@ class MasterPanel extends Component {
           <div
             id="done-panel"
             style={
-              this.state.loadOfDatas === true
+              this.state.port !== null
                 ? { display: "block" }
                 : { display: "none" }
             }
@@ -412,7 +415,7 @@ class MasterPanel extends Component {
                 <label>소프트웨어 스택</label>
               </Form.Group>
               <div className="icon-items">
-                <a href="#/" className="icon-item">
+                <a className="icon-item">
                   <img
                     className="icons"
                     name="java"
@@ -428,7 +431,7 @@ class MasterPanel extends Component {
                     onClick={this.imageClick}
                   />
                 </a>
-                <a href="#/" className="icon-item">
+                <a className="icon-item">
                   <img
                     className="icons"
                     name="node"

@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM node:10.16.0
 
 # nodejs for vscode plugin
 RUN curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh -o install_nvm.sh
@@ -9,6 +9,12 @@ RUN chmod o+x /root/.nvm/nvm.sh
 RUN /bin/bash -c "source /root/.nvm/nvm.sh && nvm install v12.0.0"
 ENV PATH="/root/.nvm/versions/node/v12.0.0/bin/:${PATH}"
 
+# nodejs
+RUN mkdir -p /home/danawa/works
+WORKDIR /home/danawa/works
+RUN wget https://github.com/heroku/node-js-sample/archive/refs/heads/master.zip
+RUN unzip master.zip
+RUN rm master.zip
 
 # code-server
 WORKDIR /home/danawa/.code-server

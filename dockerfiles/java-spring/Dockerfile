@@ -1,8 +1,8 @@
 FROM openjdk:11
 
 # GRADLE
-RUN mkdir /works
-WORKDIR /works
+RUN mkdir -p /home/danawa/works
+WORKDIR /home/danawa/works
 
 RUN apt-get update
 RUN apt-get install -y curl wget gnupg less lsof net-tools git apt-utils -y
@@ -12,6 +12,12 @@ RUN apt-get install -y emacs
 RUN wget https://downloads.gradle.org/distributions/gradle-5.4.1-bin.zip
 RUN unzip gradle-5.4.1-bin.zip
 ENV PATH="/works/gradle-5.4.1/bin:${PATH}"
+
+# java
+RUN wget https://github.com/danawalab/spring-boot-helloworld/archive/refs/heads/master.zip
+RUN unzip master.zip
+RUN rm gradle-5.4.1-bin.zip
+RUN rm master.zip
 
 # code-server
 WORKDIR /home/danawa/.code-server
