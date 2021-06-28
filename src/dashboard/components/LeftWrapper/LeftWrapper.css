@@ -1,0 +1,12 @@
+.LeftWrapper {
+    height: 95vh;
+    width: 20rem;
+    background-color: #F2F2F2;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .LeftWrapper {
+        width: 45%;
+    }
+}

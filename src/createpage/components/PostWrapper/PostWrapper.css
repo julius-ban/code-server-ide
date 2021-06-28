@@ -1,0 +1,12 @@
+.PostWrapper {
+    height: 90vh;
+    width: 60%;
+    padding: 1rem;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .PostWrapper {
+        width: 90%;
+    }
+}
