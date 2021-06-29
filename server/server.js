@@ -5,10 +5,7 @@ const PORT = process.env.PORT || 4000;
 const db = require("./config/db");
 const cors = require("cors");
 const port = require('portastic');
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(bodyParser.json());
 
 // 컨테이너 조회
 app.post("/api/search", (req, res) => {
